@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="en">
+  <head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>404 - Ghana Trotro Transit</title>
+  <link rel="shortcut icon" href="logo.png" type="image/x-icon">
+  <style>
+    :root{
+      --bg: #f8f5fc;
+      --primary: #5b1ba8;
+      --muted: #6b4f8a;
+      --danger: #d23;
+    }
+    html,body{height:100%;margin:0}
+    body{display:flex;align-items:center;justify-content:center;background:var(--bg);font-family:system-ui,-apple-system,sans-serif}
+    .wrap{display:flex;flex-direction:column;align-items:center;gap:16px}
+    .profile{width:160px;height:160px}
+    svg{display:block;width:100%;height:100%}
+    .code{font-size:28px;color:var(--primary);font-weight:700}
+    .msg{color:var(--muted);font-size:14px}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="profile" aria-hidden="true">
+      <svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="cancelled profile icon">
+        <circle cx="32" cy="22" r="10" fill="none" stroke="var(--primary)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M16 48c4-8 12-12 16-12s12 4 16 12" fill="none" stroke="var(--primary)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+        <!-- smaller X positioned bottom-right inside a small danger circle -->
+        <circle cx="46" cy="46" r="7" fill="var(--danger)"/>
+        <line x1="43" y1="43" x2="49" y2="49" stroke="#fff" stroke-width="2.5" stroke-linecap="round"/>
+        <line x1="49" y1="43" x2="43" y2="49" stroke="#fff" stroke-width="2.5" stroke-linecap="round"/>
+      </svg>
+    </div>
+    <div class="code">404</div>
+    <div class="msg">Page not available</div>
+  </div>
+</body>
+</html>
