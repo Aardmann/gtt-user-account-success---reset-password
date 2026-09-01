@@ -82,6 +82,13 @@
         color: #a89bb8;
     }
 
+    .status-text {
+        color: #8a7a9e;
+        font-size: 13px;
+        margin: 16px 0 0;
+        min-height: 18px;
+    }
+
     @media screen and (max-width: 480px) {
         .container {
             padding: 32px 24px;
@@ -100,6 +107,9 @@
     <p>Your account has been successfully created.<br>You can now open the app to continue.</p>
     <p class="subtitle">Find trotro routes across Ghana with ease.</p>
 
+    <button id="continue-btn" type="button">Open App</button>
+    <p class="status-text" id="status-text"></p>
+
     <div class="footer">
         © <span id="year"></span> | Ghana Trotro Transit
     </div>
@@ -107,6 +117,59 @@
 
 <script>
     document.getElementById('year').textContent = new Date().getFullYear();
+
+    // Same origin as the main web app, so the Supabase session Google's
+    // redirect just delivered here (via the URL hash/code, parsed
+    // automatically by supabase-js's detectSessionInUrl) is already sitting
+    // in this origin's localStorage - no need to re-parse or re-exchange it
+    // on this page. Continuing into the web app below just picks it up.
+    var WEB_APP_URL = 'https://ghana-trotro-transit.netlify.app/';
+    var APP_SCHEME_URL = 'ghanatrotrotransit://';
+
+    var isMobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
+    var statusEl = document.getElementById('status-text');
+    var btn = document.getElementById('continue-btn');
+
+    function goToWebApp() {
+        window.location.href = WEB_APP_URL;
+    }
+
+    // Tries the installed app first (mobile only); if nothing takes the
+    // handoff within the timeout - no app installed, or the OS blocked the
+    // scheme - falls back to the web app so the person is never stuck here.
+    function openApp() {
+        if (!isMobile) {
+            goToWebApp();
+            return;
+        }
+
+        btn.disabled = true;
+        statusEl.textContent = 'Opening the app…';
+
+        var handedOff = false;
+        function onVisibilityChange() {
+            if (document.hidden) handedOff = true;
+        }
+        document.addEventListener('visibilitychange', onVisibilityChange);
+
+        var fallbackTimer = setTimeout(function () {
+            document.removeEventListener('visibilitychange', onVisibilityChange);
+            if (!handedOff && !document.hidden) {
+                statusEl.textContent = 'App not found — continuing in your browser…';
+                goToWebApp();
+            }
+        }, 1500);
+
+        window.location.href = APP_SCHEME_URL;
+    }
+
+    btn.textContent = isMobile ? 'Open App' : 'Continue to Ghana Trotro Transit';
+    btn.addEventListener('click', openApp);
+
+    // Auto-attempt on load too, so most people never have to tap anything -
+    // the button above is just there as a fallback if the browser blocks
+    // the automatic redirect.
+    openApp();
 </script>
 </body>
 </html>
